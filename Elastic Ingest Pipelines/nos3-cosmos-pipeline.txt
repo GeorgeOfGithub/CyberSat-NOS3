@@ -1,0 +1,16 @@
+[
+  {
+    "set": {
+      "field": "tags",
+      "value": [
+        "routed_cosmos"
+      ]
+    }
+  },
+  {
+    "set": {
+      "field": "pipeline_handled",
+      "value": "cosmos"
+    }
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "set": {
+      "field": "tags",
+      "value": [
+        "nos3",
+        "simulation",
+        "streaming_data"
+      ],
+      "tag": "streaming_data_pipeline"
+    }
+  },
+  {
+    "grok": {
+      "field": "message",
+      "patterns": [
+        "%{TIMESTAMP_ISO8601:log.original_timestamp} \\[ %{LOGLEVEL:log.level} ] - %{WORD:simulation.action}:\\s+%{DATA:simulation.action_type}:\\s+%{GREEDYDATA:simulation.data}"
+      ],
+      "ignore_failure": true
+    }
+  },
+  {
+    "grok": {
+      "field": "simulation.data",
+      "patterns": [
+        ".*?Pos: %{NUMBER:simulation.data_point.position.x:float}, %{NUMBER:simulation.data_point.position.y:float}, %{NUMBER:simulation.data_point.position.z:float} Vel: %{NUMBER:simulation.data_point.velocity.x:float}, %{NUMBER:simulation.data_point.velocity.y:float}, %{NUMBER:simulation.data_point.velocity.z:float} svb: %{NUMBER:simulation.data_point.svb.x:float}, %{NUMBER:simulation.data_point.svb.y:float}, %{NUMBER:simulation.data_point.svb.z:float} bvb: %{NUMBER:simulation.data_point.bvb.x:float}, %{NUMBER:simulation.data_point.bvb.y:float}, %{NUMBER:simulation.data_point.bvb.z:float} Hvb: %{NUMBER:simulation.data_point.hvb.x:float}, %{NUMBER:simulation.data_point.hvb.y:float}, %{NUMBER:simulation.data_point.hvb.z:float} wn : %{NUMBER:simulation.data_point.wn.x:float}, %{NUMBER:simulation.data_point.wn.y:float}, %{NUMBER:simulation.data_point.wn.z:float} qn : %{NUMBER:simulation.data_point.qn.a:float}, %{NUMBER:simulation.data_point.qn.b:float}, %{NUMBER:simulation.data_point.qn.c:float}, %{NUMBER:simulation.data_point.qn.d:float}"
+      ],
+      "if": "ctx.simulation != null && ctx.simulation.action_type == \"Data point\"",
+      "ignore_failure": true
+    }
+  }
+]
+
+Failure Processors:
+[
+  {
+    "set": {
+      "field": "error.message",
+      "value": "{{ _ingest.on_failure_message }}"
+    }
+  }
+]

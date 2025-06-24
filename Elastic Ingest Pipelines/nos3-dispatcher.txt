@@ -1,0 +1,47 @@
+[
+  {
+    "set": {
+      "field": "host.name",
+      "value": "nos3"
+    }
+  },
+  {
+    "set": {
+      "field": "tags",
+      "value": "nos3-dispatcher"
+    }
+  },
+  {
+    "pipeline": {
+      "name": "nos3-simulation-pipeline",
+      "if": "ctx.log != null && ctx.log.type == 'simulation'"
+    }
+  },
+  {
+    "pipeline": {
+      "name": "nos3-cosmos-server-pipeline",
+      "if": "ctx.log != null && ctx.log.type == 'cosmos_server'"
+    }
+  },
+  {
+    "pipeline": {
+      "name": "nos3-cosmos-pipeline",
+      "if": "ctx.log != null && ctx.log.type == 'cosmos'"
+    }
+  },
+  {
+    "pipeline": {
+      "name": "nos3-cosmos-cmd-pipeline",
+      "if": "ctx.log != null && ctx.log.type == 'cosmos-cmd'"
+    }
+  },
+  {
+    "set": {
+      "field": "tags",
+      "value": [
+        "no_pipeline_matched"
+      ],
+      "if": "ctx.log == null || ctx.log.type == null"
+    }
+  }
+]

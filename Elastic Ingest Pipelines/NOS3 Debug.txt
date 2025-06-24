@@ -1,0 +1,36 @@
+[
+  {
+    "remove": {
+      "field": "_source.container"
+    }
+  },
+  {
+    "dissect": {
+      "field": "message",
+      "pattern": "%{timestamp} [%{loglevel->}] - %{component}: %{msg}"
+    }
+  },
+  {
+    "date": {
+      "field": "timestamp",
+      "formats": [
+        "[\"yyyy-MM-dd HH:mm:ss.SSSSSS\"]",
+        "yyyy-MM-dd HH:mm:ss.SSSSSS"
+      ],
+      "target_field": "@timestamp"
+    }
+  },
+  {
+    "dissect": {
+      "field": "_source.component",
+      "pattern": "%{class}::%{method}"
+    }
+  },
+  {
+    "set": {
+      "field": "tags",
+      "value": "nos3, simulation, cosmos-cmd",
+      "ignore_failure": true
+    }
+  }
+]

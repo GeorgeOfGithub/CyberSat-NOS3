@@ -1,0 +1,10 @@
+[
+  {
+    "set": {
+      "field": "tags",
+      "value": [
+        "fallback_pipeline_executed"
+      ]
+    }
+  }
+]

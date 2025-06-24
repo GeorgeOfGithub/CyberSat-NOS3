@@ -1,0 +1,25 @@
+[
+  {
+    "grok": {
+      "field": "message",
+      "patterns": [
+        "%{TIMESTAMP_ISO8601:log.original_timestamp} \\[ %{LOGLEVEL:log.level} \\] - %{WORD:simulation.action}::%{WORD:simulation.action_type}:%{SPACE}%{GREEDYDATA:simulation.data}"
+      ],
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "simulation.action",
+      "value": "GPSSimHardwareModel",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "tags",
+      "value": "nos3,simulation,GPSSimHardwareModel",
+      "ignore_failure": true
+    }
+  }
+]

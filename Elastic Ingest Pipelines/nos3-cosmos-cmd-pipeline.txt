@@ -1,0 +1,69 @@
+[
+  {
+    "set": {
+      "field": "tags",
+      "value": [
+        "nos3",
+        "simulation",
+        "cosmos-cmd"
+      ]
+    }
+  },
+  {
+    "csv": {
+      "field": "message",
+      "target_fields": [
+        "cosmos.cmd.date",
+        "cosmos.cmd.name",
+        "cosmos.cmd.cmd",
+        "cosmos.cmd.field1",
+        "cosmos.cmd.value1",
+        "cosmos.cmd.field2",
+        "cosmos.cmd.value2",
+        "cosmos.cmd.field3",
+        "cosmos.cmd.value3",
+        "cosmos.cmd.field4",
+        "cosmos.cmd.value4",
+        "cosmos.cmd.field5",
+        "cosmos.cmd.value5",
+        "cosmos.cmd.field6",
+        "cosmos.cmd.value6",
+        "cosmos.cmd.field7",
+        "cosmos.cmd.value7",
+        "cosmos.cmd.field8",
+        "cosmos.cmd.value8",
+        "cosmos.cmd.field9",
+        "cosmos.cmd.value9",
+        "cosmos.cmd.field10",
+        "cosmos.cmd.value10"
+      ],
+      "ignore_missing": true
+    }
+  },
+  {
+    "date": {
+      "field": "cosmos.cmd.date",
+      "target_field": "cosmos.cmd.date",
+      "formats": [
+        "yyyy/MM/dd HH:mm:ss.SSS"
+      ]
+    }
+  },
+  {
+    "script": {
+      "lang": "painless",
+      "source": "           Map fieldMap = new HashMap();           for (int i = 1; i <= 10; i++) {             String fieldKey = 'field' + i;             String valueKey = 'value' + i;             if (ctx.cosmos?.cmd?.containsKey(fieldKey) && ctx.cosmos?.cmd?.containsKey(valueKey)) {               def key = ctx.cosmos.cmd[fieldKey];               def value = ctx.cosmos.cmd[valueKey];               if (key != null && value != null && key != '' && value != '') {                 fieldMap.put(key, value);               }               ctx.cosmos.cmd.remove(fieldKey);               ctx.cosmos.cmd.remove(valueKey);             }           }           ctx.cosmos.cmd.fields = fieldMap;         "
+    }
+  }
+]
+
+
+Failure processors:
+[
+  {
+    "set": {
+      "field": "error.message",
+      "value": "{{ _ingest.on_failure_message }}"
+    }
+  }
+]

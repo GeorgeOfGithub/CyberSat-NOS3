@@ -1,0 +1,36 @@
+[
+  {
+    "set": {
+      "field": "tags",
+      "value": [
+        "nos3",
+        "simulation"
+      ],
+      "if": "ctx.message == null || (!ctx.message.contains('send_streaming_data') && !ctx.message.contains('GPSSimHardwareModel'))"
+    }
+  },
+  {
+    "grok": {
+      "field": "message",
+      "patterns": [
+        "%{TIMESTAMP_ISO8601:log.original_timestamp} \\[%{LOGLEVEL:log.level}\\]"
+      ],
+      "ignore_failure": true,
+      "if": "ctx.message != null && (!ctx.message.contains('send_streaming_data') && !ctx.message.contains('RESPONSE:'))"
+    }
+  },
+  {
+    "pipeline": {
+      "name": "nos3-simulation-send_streaming_data",
+      "if": "ctx.message != null && ctx.message.contains('send_streaming_data')",
+      "ignore_failure": true
+    }
+  },
+  {
+    "pipeline": {
+      "name": "nos3-simulation-GPSSimHardwareModel",
+      "if": "ctx.message != null && ctx.message.contains('GPSSimHardwareModel')",
+      "ignore_failure": true
+    }
+  }
+]
