@@ -1,0 +1,241 @@
+[
+    {
+        "Id": "f42e7a814a7dd3a113414b872de22bdf3fd01fbdb8a75ef6ba7db2eac06ad539",
+        "Created": "2025-04-09T13:43:08.818995132Z",
+        "Path": "./nos3-single-simulator",
+        "Args": [
+            "-f",
+            "nos3-simulator.xml",
+            "generic_torquer_sim"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 59743,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2025-04-09T13:43:08.888778303Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:7cd96f2cd9ea1e13a4146a71959fc827aa2601477416b7eb7a39102b19cc0a59",
+        "ResolvConfPath": "/var/lib/docker/containers/f42e7a814a7dd3a113414b872de22bdf3fd01fbdb8a75ef6ba7db2eac06ad539/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/f42e7a814a7dd3a113414b872de22bdf3fd01fbdb8a75ef6ba7db2eac06ad539/hostname",
+        "HostsPath": "/var/lib/docker/containers/f42e7a814a7dd3a113414b872de22bdf3fd01fbdb8a75ef6ba7db2eac06ad539/hosts",
+        "LogPath": "/var/lib/docker/containers/f42e7a814a7dd3a113414b872de22bdf3fd01fbdb8a75ef6ba7db2eac06ad539/f42e7a814a7dd3a113414b872de22bdf3fd01fbdb8a75ef6ba7db2eac06ad539-json.log",
+        "Name": "/sc_1_torquer_sim",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/etc/passwd:/etc/passwd:ro",
+                "/etc/group:/etc/group:ro",
+                "/home/nos3/nos3/sims/build:/home/nos3/nos3/sims/build"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "nos3_sc_1",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": true,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                33,
+                108
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/interrupts",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "ID": "f42e7a814a7dd3a113414b872de22bdf3fd01fbdb8a75ef6ba7db2eac06ad539",
+                "LowerDir": "/var/lib/docker/overlay2/5117105c70013713f576af255e0ab29080d06ffd56bf507692e8c309b116e884-init/diff:/var/lib/docker/overlay2/cf1e4886a354eaf1f8aeef16ebe02ec8c3018469ff0b8698fdbcbb27df6e6577/diff:/var/lib/docker/overlay2/f7b42fb4b9f6cb0d2072e285bb379d08a876178767463799bcf334950c778f3a/diff:/var/lib/docker/overlay2/8de09507a3b6244c96b4ac1aef1f91f5bbfb0e4a3dc5f9efbafb75bbc9071820/diff:/var/lib/docker/overlay2/66c6aae79b5f72b4a1f7dc2ea7eb559737d241dcddb5f5e37eb1363a8384c532/diff:/var/lib/docker/overlay2/bb578cb9273772e48a31752564b2e10296dc0f1338bc7e2fb42e0c028be00f18/diff:/var/lib/docker/overlay2/8b7375131cad255e625f5503a6235b66092a5b4e5aecb7ba977ebf4472ad6c0d/diff:/var/lib/docker/overlay2/cb3cd662e12a9ec710b8b5f7fbb0d194d1a5759eede81768d2aba70579a5427e/diff",
+                "MergedDir": "/var/lib/docker/overlay2/5117105c70013713f576af255e0ab29080d06ffd56bf507692e8c309b116e884/merged",
+                "UpperDir": "/var/lib/docker/overlay2/5117105c70013713f576af255e0ab29080d06ffd56bf507692e8c309b116e884/diff",
+                "WorkDir": "/var/lib/docker/overlay2/5117105c70013713f576af255e0ab29080d06ffd56bf507692e8c309b116e884/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/etc/passwd",
+                "Destination": "/etc/passwd",
+                "Mode": "ro",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/etc/group",
+                "Destination": "/etc/group",
+                "Mode": "ro",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/nos3/nos3/sims/build",
+                "Destination": "/home/nos3/nos3/sims/build",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+            "Hostname": "f42e7a814a7d",
+            "Domainname": "",
+            "User": "1000:1000",
+            "AttachStdin": true,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "Tty": true,
+            "OpenStdin": true,
+            "StdinOnce": true,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "./nos3-single-simulator",
+                "-f",
+                "nos3-simulator.xml",
+                "generic_torquer_sim"
+            ],
+            "Image": "ivvitc/nos3-64:20250217",
+            "Volumes": null,
+            "WorkingDir": "/home/nos3/nos3/sims/build/bin",
+            "Entrypoint": null,
+            "OnBuild": null,
+            "Labels": {
+                "org.opencontainers.image.ref.name": "ubuntu",
+                "org.opencontainers.image.version": "22.04"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "2dcac46b4ed7e8cbd2b84fabe45b574cce534e6e8ec7d792dff3e1b7ed8c3aa4",
+            "SandboxKey": "/var/run/docker/netns/2dcac46b4ed7",
+            "Ports": {},
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "nos3_sc_1": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "72:2e:ff:cc:4a:1f",
+                    "DriverOpts": null,
+                    "GwPriority": 0,
+                    "NetworkID": "7dccd7dfb32a99a5e02a95f2a3876347f15edd1be0e81428975879aabf21f2e5",
+                    "EndpointID": "3b8a1e8488dd57580c62701b2f10b3b0a16c7775b31490778267c98fda53e252",
+                    "Gateway": "172.18.0.1",
+                    "IPAddress": "172.18.0.25",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": [
+                        "sc_1_torquer_sim",
+                        "f42e7a814a7d"
+                    ]
+                }
+            }
+        }
+    }
+]

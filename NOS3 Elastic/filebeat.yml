@@ -1,0 +1,70 @@
+filebeat.inputs:
+  # Custom Log Files
+  - type: filestream
+    id: simulation_logs
+    enabled: true
+    paths:
+      - /usr/share/filebeat/nos-logs/sims-logs/*.log
+      - /usr/share/filebeat/nos-logs/sims-logs/*.txt
+    fields:
+      log.type: "simulation"
+    fields_under_root: true
+  - type: filestream
+    id: cosmos_server_logs
+    enabled: true
+    paths:
+      - /usr/share/filebeat/nos-logs/cosmos/*server_messages.txt
+    fields:
+      log.type: "cosmos_server"
+    fields_under_root: true
+  - type: filestream
+    id: cosmos_logs
+    enabled: true
+    paths:
+      - /usr/share/filebeat/nos-logs/cosmos/tlm/*.txt
+    fields:
+      log.type: "cosmos"
+    fields_under_root: true
+  - type: filestream
+    id: cosmos_cmd_logs
+    enabled: true
+    paths:
+      - /usr/share/filebeat/nos-logs/cosmos/cmd/*cmd*.csv
+    fields:
+      log.type: "cosmos-cmd"
+    fields_under_root: true
+
+processors:
+  - add_fields:
+      target: ''
+      fields:
+        _pipeline: "nos3-dispatcher"
+
+# Output to Elasticsearch Directly
+output.elasticsearch:
+  hosts: ["https://10.51.49.248:9200"]
+  ssl:
+    certificate_authorities: ["/setup/certs/ca.crt"]
+  pipeline: nos3-dispatcher
+  username: "${ELASTIC_USER}"
+  password: "${ELASTIC_PASSWORD}"
+
+setup.kibana:
+  host: "http://${ELASTIC_VM_IP}:5601"
+
+
+filebeat.autodiscover:
+ providers:
+   - type: docker
+     hints.enabled: true
+
+
+
+logging:
+  level: debug
+  to_files: true
+  files:
+    path: /usr/share/filebeat/logs
+    name: filebeat
+    keepfiles: 7
+    permissions: 0644

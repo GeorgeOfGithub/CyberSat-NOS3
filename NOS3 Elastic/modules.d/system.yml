@@ -1,0 +1,15 @@
+- module: system
+  enabled: true
+  period: 60s
+  metricsets:
+    - cpu
+    - memory
+    - network
+    - filesystem
+    - load
+  processes: ['.*']
+  process.include_top_n:
+    by_cpu: 5
+    by_memory: 5
+  hostfs: /hostfs
+

@@ -1,0 +1,104 @@
+PUT _ingest/pipeline/nos3-dispatcher
+{
+  "description": "Dispatch NOS3 logs to pipelines based on log.type",
+  "processors": [
+    {
+      "pipeline": {
+        "name": "nos3-simulation-pipeline",
+        "if": "ctx.log != null && ctx.log.type == 'simulation'"
+      }
+    },
+    {
+      "pipeline": {
+        "name": "nos3-cosmos-server-pipeline",
+        "if": "ctx.log != null && ctx.log.type == 'cosmos_server'"
+      }
+    },
+    {
+      "pipeline": {
+        "name": "nos3-cosmos-pipeline",
+        "if": "ctx.log != null && ctx.log.type == 'cosmos'"
+      }
+    },
+    {
+      "set": {
+        "field": "tags",
+        "value": ["no_pipeline_matched"],
+        "if": "ctx.log == null || ctx.log.type == null"
+      }
+    }
+  ]
+}
+
+
+PUT _ingest/pipeline/nos3-simulation-pipeline
+{
+  "description": "Initial pipeline for simulation logs",
+  "processors": [
+    {
+      "set": {
+        "field": "tags",
+        "value": ["routed_simulation"]
+      }
+    },
+    {
+      "set": {
+        "field": "pipeline_handled",
+        "value": "simulation"
+      }
+    }
+  ]
+}
+
+PUT _ingest/pipeline/nos3-cosmos-server-pipeline
+{
+  "description": "Initial pipeline for COSMOS server logs",
+  "processors": [
+    {
+      "set": {
+        "field": "tags",
+        "value": ["routed_cosmos_server"]
+      }
+    },
+    {
+      "set": {
+        "field": "pipeline_handled",
+        "value": "cosmos_server"
+      }
+    }
+  ]
+}
+
+
+PUT _ingest/pipeline/nos3-cosmos-server-pipeline
+{
+  "description": "Initial pipeline for COSMOS server logs",
+  "processors": [
+    {
+      "set": {
+        "field": "tags",
+        "value": ["routed_cosmos_server"]
+      }
+    },
+    {
+      "set": {
+        "field": "pipeline_handled",
+        "value": "cosmos_server"
+      }
+    }
+  ]
+}
+
+
+PUT _ingest/pipeline/nos3-fallback-pipeline
+{
+  "description": "Fallback pipeline to tag events with ingestion errors",
+  "processors": [
+    {
+      "set": {
+        "field": "tags",
+        "value": ["fallback_pipeline_executed"]
+      }
+    }
+  ]
+}

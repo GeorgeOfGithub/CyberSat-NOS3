@@ -1,0 +1,145 @@
+volumes:
+  filebeat_config:
+  filebeat_certs:
+  filebeatdata01:  # This is Filebeat’s internal data folder. It stores registry data (which log files were processed, offsets, etc.).
+  metricbeat_data:  # This is Metricbeat’s internal data folder. It stores registry data (which metrics were collected, offsets, etc.).
+  metricbeat_config:
+  metricbeat_certs:
+
+services:
+  filebeat-setup:
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    user: root
+    volumes:
+      - filebeat_config:/setup/config
+      - filebeat_certs:/setup/certs
+      - ./filebeat.yml:/setup/filebeat.yml:ro  # ro = read-only
+      - ./cert/ca.crt:/setup/ca.crt:ro
+    environment:
+      - ELASTIC_USER=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_HOSTS=https://${ELASTIC_VM_IP}:9200
+      - ELASTICSEARCH_HOST=https://${ELASTIC_VM_IP}:9200  # maybe we don't need two
+      - KIBANA_HOSTS=http://${ELASTIC_VM_IP}:5601
+    entrypoint: /bin/bash
+    command: >
+      -c '
+      echo "[Filebeat Setup] Copying config and certs...";
+      mkdir -p /setup/config /setup/certs;
+      cp /setup/filebeat.yml /setup/config/filebeat.yml;
+      cp /setup/ca.crt /setup/certs/ca.crt;
+      echo "[Filebeat Setup] Validating config...";
+      if filebeat test config -c /setup/config/filebeat.yml; then
+        echo "✅ Filebeat config is valid.";
+      else
+        echo "❌ Filebeat config validation failed.";
+        exit 1;
+      fi;
+      echo "[Filebeat Setup] Setting permissions...";
+      chmod 640 /setup/config/filebeat.yml;
+      chmod 640 /setup/certs/ca.crt;
+      chown -R root:root /setup;
+      echo "[Filebeat Setup] Done.";
+      '
+
+  filebeat01:
+    depends_on:
+      filebeat-setup:
+        condition: service_completed_successfully
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    user: root
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "filebeat test config -c /setup/config/filebeat.yml && curl -sf -u ${ELASTIC_USER}:${ELASTIC_PASSWORD} --cacert /setup/certs/ca.crt https://${ELASTIC_VM_IP}:9200/_cluster/health | grep -q '\"status\"'"
+      ]  # maybe some of this should be moved/copied to filebeat-setup?
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - filebeat_config:/setup/config
+      - filebeat_certs:/setup/certs
+      - filebeatdata01:/usr/share/filebeat/data
+      - /home/nos3/Desktop/Elastic/filebeat-logs:/usr/share/filebeat/logs  # logs from filebeat itself
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro  # docker
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # Docker
+      - ../Logs:/usr/share/filebeat/custom_logs:ro  # dont know?
+      - /home/nos3/nos3/sims/build/bin:/usr/share/filebeat/nos-logs/sims-logs:ro  # Sims logs
+      - /home/nos3/nos3/gsw/cosmos/outputs/logs:/usr/share/filebeat/nos-logs/cosmos:ro  # Cosmos logs
+    environment:
+      - ELASTIC_USER=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_HOSTS=https://${ELASTIC_VM_IP}:9200
+      - ELASTICSEARCH_HOST=https://${ELASTIC_VM_IP}:9200
+      - KIBANA_HOSTS=http://${ELASTIC_VM_IP}:5601
+    command:
+      - -c
+      - /setup/config/filebeat.yml
+      - --strict.perms=false
+
+
+  metricbeat-setup:
+    image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
+    user: root
+    volumes:
+      - metricbeat_config:/setup/config
+      - metricbeat_certs:/setup/certs
+      - ./metricbeat.yml:/setup/metricbeat.yml:ro
+      - ./cert/ca.crt:/setup/ca.crt:ro
+    environment:
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTICSEARCH_HOST=https://${ELASTIC_VM_IP}:9200
+      - KIBANA_HOSTS=http://${ELASTIC_VM_IP}:5601
+    entrypoint: /bin/bash
+    command: >
+      -c '
+      echo "[Metricbeat Setup] Copying config and certs...";
+      mkdir -p /setup/config /setup/certs;
+      cp /setup/metricbeat.yml /setup/config/metricbeat.yml;
+      cp /setup/ca.crt /setup/certs/ca.crt;
+      echo "[Metricbeat Setup] Validating config...";
+      if metricbeat test config -c /setup/config/metricbeat.yml; then
+        echo "✅ Metricbeat config is valid.";
+      else
+        echo "❌ Metricbeat config validation failed.";
+        exit 1;
+      fi;
+      echo "[Metricbeat Setup] Loading index templates and dashboards...";
+      metricbeat setup --dashboards -c /setup/config/metricbeat.yml;
+      echo "[Metricbeat Setup] Done.";
+      '
+
+  metricbeat1:
+    depends_on:
+      metricbeat-setup:
+        condition: service_completed_successfully
+    image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
+    container_name: metricbeat
+    user: root
+    restart: unless-stopped
+    volumes:
+      - metricbeat_config:/setup/config
+      - metricbeat_certs:/setup/certs
+      - metricbeat_data:/usr/share/metricbeat/data
+      - ./modules.d:/usr/share/metricbeat/modules.d:ro
+      - /proc:/hostfs/proc:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /:/hostfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTICSEARCH_HOST=https://${ELASTIC_VM_IP}:9200
+      - KIBANA_HOSTS=https://${ELASTIC_VM_IP}:5601
+    command:
+      - -c
+      - /setup/config/metricbeat.yml
+      - --strict.perms=false
+      - -e
+      - --system.hostfs=/hostfs
+
+
+networks:
+  monitoring:
+    external: false
